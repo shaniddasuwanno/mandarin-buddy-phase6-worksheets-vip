@@ -26,10 +26,10 @@ export default function TianziGrid({character,mode,lang,onComplete}:{character:s
    });writer.current=w;
    if(typeof ResizeObserver!=='undefined'){observer=new ResizeObserver(()=>{if(cancelled)return;const next=Math.max(40,Math.round(el.clientWidth));w.updateDimensions({width:next,height:next,padding:Math.round(next*.1)});});observer.observe(el);}
    await w.getCharacterData();if(cancelled)return;
-   if(mode==='animate')await w.animateCharacter();
+   if(mode==='animate'){const result=await w.animateCharacter();if(!cancelled&&!result?.canceled){setStatus('done');latestComplete.current?.();}}
    else await w.quiz({showHintAfterMisses:2,highlightOnComplete:true,onComplete:()=>{if(!cancelled){setStatus('done');latestComplete.current?.();}}});
   }catch{if(!cancelled)setStatus('error')}};void start();
-  return()=>{cancelled=true;controller.abort();observer?.disconnect();writer.current?.cancelQuiz();writer.current=null;el.replaceChildren();};
+  return()=>{cancelled=true;controller.abort();observer?.disconnect();const old=writer.current;old?.cancelQuiz();if(old)void old.hideCharacter({duration:0}).catch(()=>{});writer.current=null;el.replaceChildren();};
  },[character,mode,retry]);
  const th=lang==='th';return <div className="min-w-0"><TianziFrame className="rounded-xl"><div ref={target} className="absolute inset-0" style={{touchAction:mode==='trace'?'none':'auto'}} aria-label={mode==='trace'?`${th?'ฝึกเขียน':'Trace'} ${character}`:character}/>{(mode==='study'||status==='error'||status==='loading')&&<div lang="zh-CN" className={`pointer-events-none absolute inset-0 grid place-items-center font-bold text-emerald-950 ${status==='loading'?'opacity-25':''}`} style={{fontSize:'clamp(2.2rem, 11vw, 5rem)'}}>{character}</div>}{status==='done'&&<span aria-hidden="true" className="absolute right-1 top-1 rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-bold text-white">✓</span>}</TianziFrame>{status==='loading'&&<p role="status" className="mt-1 text-center text-xs text-slate-500">{th?'กำลังโหลดขีด…':'Loading strokes…'}</p>}{status==='error'&&<button onClick={()=>setRetry(i=>i+1)} className="mt-1 w-full rounded-lg bg-rose-50 px-2 py-2 text-xs font-bold text-rose-800">{th?'โหลดไม่ได้ · ลองใหม่':'Could not load · retry'}</button>}</div>;
 }

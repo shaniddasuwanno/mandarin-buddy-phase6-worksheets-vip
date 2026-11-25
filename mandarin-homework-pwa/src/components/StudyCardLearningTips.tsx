@@ -1,0 +1,9 @@
+'use client';
+import {BookOpen,Heart,Volume2,Puzzle} from 'lucide-react';
+import type {PrimaryCurriculumWord} from '@/data/primaryCurriculum';
+import type {Language} from '@/lib/translations';
+import {useMandarinSpeech} from '@/lib/useMandarinSpeech';
+export default function StudyCardLearningTips({word,lang}:{word:PrimaryCurriculumWord;lang:Language}){
+ const th=lang==='th',{speak,error}=useMandarinSpeech();
+ return <div className="mt-4 space-y-3"><section className="rounded-2xl border-2 border-sky-100 bg-sky-50 p-3"><h3 className="flex items-center gap-2 text-sm font-black text-sky-900"><BookOpen size={18}/>{th?'คำใบ้เขียนตามคำบอก':'Dictation clue'}</h3><div className="mt-2 flex items-start justify-between gap-2"><p lang="zh-CN" className="text-lg font-bold text-slate-800">{word.tingxie_callout_zh}</p><button type="button" aria-label={th?'ฟังคำใบ้':'Hear dictation clue'} onClick={()=>speak(word.tingxie_callout_zh)} className="shrink-0 rounded-full bg-sky-200 p-2 text-sky-900"><Volume2 size={20}/></button></div>{error&&<p role="status" className="text-xs text-rose-700">{th?'เล่นเสียงไม่ได้':'Audio unavailable'}</p>}</section><section className="rounded-2xl border-2 border-amber-100 bg-amber-50 p-3"><h3 className="flex items-center gap-2 text-sm font-black text-amber-900"><Puzzle size={18}/>{th?'เทคนิคจำส่วนประกอบอักษร':'Character component tip'}</h3><p className="mt-2 text-sm leading-relaxed">{th?word.radical_tip_th:word.radical_tip_en}</p></section><section className="rounded-2xl bg-rose-50 p-3"><h3 className="flex items-center gap-2 text-sm font-black text-rose-900"><Heart size={18}/>{th?'คุณธรรมประจำสัปดาห์':'Weekly value'}</h3><p className="mt-1 text-sm font-bold">{th?word.weekly_moral_th:word.weekly_moral_en}</p>{th&&<p className="mt-1 text-xs text-slate-600">{word.moral_lesson_th}</p>}</section></div>
+}

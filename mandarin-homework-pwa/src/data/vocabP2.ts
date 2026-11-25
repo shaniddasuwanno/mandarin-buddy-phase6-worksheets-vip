@@ -1,0 +1,201 @@
+export interface P2Word {
+  id:string; grade:2; week:number; unit_title_th:string; unit_title_en:string;
+  hanzi:string; pinyin:string; meaning_th:string; meaning_en:string;
+  is_mandatory_write:boolean;
+  sentences:{hanzi:string;pinyin:string;meaning_th:string;meaning_en:string}[];
+  example_sentence:string; example_pinyin:string; example_th:string; example_en:string;
+  memory_tip_th:string; memory_tip_en:string; moral_lesson_th:string;
+  tingxie_callout_th:string; tingxie_callout_zh:string;
+  radical_tip_th:string; radical_tip_en:string; radical_tip_zh:string;
+  illustration:{scene:string;animation:string};
+}
+type Row = [string,string,string,string,string,string,string,string,string,string,string,string,string];
+export const p2Weeks = [
+  {
+    "week": 1,
+    "title_th": "มุมอ่านหนังสือและของใช้",
+    "title_en": "Study corner and belongings"
+  },
+  {
+    "week": 2,
+    "title_th": "งานอดิเรกและการอ่าน",
+    "title_en": "Hobbies and literacy"
+  },
+  {
+    "week": 3,
+    "title_th": "คำบอกตำแหน่งและทิศทาง",
+    "title_en": "Positions and directions"
+  },
+  {
+    "week": 4,
+    "title_th": "คุณค่าของครอบครัว",
+    "title_en": "Family values"
+  },
+  {
+    "week": 5,
+    "title_th": "กลุ่มอักษร 青 และคำพ้องเสียง",
+    "title_en": "The 青 component family"
+  },
+  {
+    "week": 6,
+    "title_th": "ธรรมชาติและสิ่งแวดล้อม",
+    "title_en": "Nature and environment"
+  },
+  {
+    "week": 7,
+    "title_th": "ความปลอดภัยและกฎเกณฑ์",
+    "title_en": "Safety and rules"
+  },
+  {
+    "week": 8,
+    "title_th": "ความขยันและประหยัด",
+    "title_en": "Diligence and thrift"
+  }
+] as const;
+export const p2DirectionScenes:Record<string,{scene:string;animation:string}> = {
+  '上':{scene:'up',animation:'move-above'},
+  '下':{scene:'down',animation:'move-below'},
+  '左':{scene:'left',animation:'move-left'},
+  '右':{scene:'right',animation:'move-right'},
+  '中':{scene:'middle',animation:'move-center'},
+  '前':{scene:'front',animation:'move-front'},
+  '后':{scene:'behind',animation:'move-behind'},
+  '里面':{scene:'inside',animation:'move-inside'},
+  '外面':{scene:'outside',animation:'move-outside'},
+  '旁边':{scene:'beside',animation:'move-beside'}
+};
+function make(week:number,rows:Row[]):P2Word[] {
+  const unit=p2Weeks[week-1];
+  if(!unit || rows.length!==10) throw new Error('Each week needs 10 entries');
+  return rows.map(([hanzi,pinyin,meaning_th,meaning_en,h,p,th,en,dictation,radical_tip_zh,radical_tip_th,radical_tip_en,moral_lesson_th],i)=>({
+    id:'P2-W'+String(week)+'-'+String(i+1).padStart(2,'0'),
+    grade:2,week,unit_title_th:unit.title_th,unit_title_en:unit.title_en,
+    hanzi,pinyin,meaning_th,meaning_en,is_mandatory_write:true,
+    sentences:[
+      {hanzi:h,pinyin:p,meaning_th:th,meaning_en:en},
+      {hanzi:'今天的小组学习中，我和同学认真练习读写“'+hanzi+'”。',pinyin:'Jīntiān de xiǎozǔ xuéxí zhōng, wǒ hé tóngxué rènzhēn liànxí dúxiě “'+pinyin+'”.',meaning_th:'วันนี้ในการเรียนกลุ่มฉันกับเพื่อนตั้งใจฝึกอ่านเขียน '+hanzi,meaning_en:'In today’s group study, my classmates and I practise reading and writing “'+hanzi+'”.'}
+    ],
+    example_sentence:h,example_pinyin:p,example_th:th,example_en:en,
+    memory_tip_th:radical_tip_th,memory_tip_en:radical_tip_en,moral_lesson_th,
+    tingxie_callout_th:'คำใบ้เขียนตามคำบอก: '+dictation,tingxie_callout_zh:dictation,
+    radical_tip_th,radical_tip_en,radical_tip_zh,
+    illustration:p2DirectionScenes[hanzi]??{scene:hanzi,animation:'bounce'}
+  }));
+}
+
+export const p2Week1 = make(1, [
+  ["满","mǎn","เต็ม","Full","我把储蓄罐装满以后，决定存起一部分零用钱。","Wǒ bǎ chǔxùguàn zhuāngmǎn yǐhòu, juédìng cúnqǐ yí bùfen língyòngqián.","เมื่อกระปุกออมสินเต็มฉันตั้งใจเก็บเงินส่วนหนึ่ง","After filling my savings jar, I decide to save some pocket money.","扑满的满","满 有氵","氵 คือน้ำ นึกถึงภาชนะที่มีน้ำเต็ม","氵 suggests water; imagine a full container.","รู้จักออมเงิน"],
+  ["扑满","pūmǎn","กระปุกออมสิน","Piggy bank","每个星期，我都会把剩下的零用钱放进扑满。","Měi ge xīngqī, wǒ dōu huì bǎ shèngxia de língyòngqián fàngjìn pūmǎn.","ทุกสัปดาห์ฉันใส่เงินเหลือลงกระปุก","Every week I put my spare pocket money in my piggy bank.","扑满，扑倒的扑，满了的满","扑 有扌；满 有氵","扑 มี 扌 ส่วน 满 มี 氵","扑 contains 扌; 满 contains 氵.","เก็บออม"],
+  ["典","diǎn","แบบแผน / พจนานุกรม","Classic / dictionary","遇到新字，我会先用词典了解它的意思。","Yùdào xīnzì, wǒ huì xiān yòng cídiǎn liǎojiě tā de yìsi.","เมื่อพบอักษรใหม่ฉันเปิดพจนานุกรมดูความหมาย","When I encounter a new character, I use a dictionary to understand it.","字典的典","典 下面有八形","典 มีรูป 八 ด้านล่าง","典 has an 八-shaped bottom.","ค้นคว้าด้วยตนเอง"],
+  ["查字典","chá zìdiǎn","ค้นพจนานุกรมอักษรจีน","Look up a character","遇到生字，我会先查字典，再向老师请教。","Yùdào shēngzì, wǒ huì xiān chá zìdiǎn, zài xiàng lǎoshī qǐngjiào.","เมื่อพบอักษรที่ไม่รู้ฉันค้นพจนานุกรมแล้วถามครู","When I encounter unknown characters, I look them up and then ask the teacher.","查字典，检查的查，汉字的字，字典的典","查 上木下旦；字 有宀","查 มี 木 บน 旦 ล่าง 字 มี 宀","查 has 木 above 旦; 字 has 宀.","เรียนรู้จากการค้นหา"],
+  ["筒","tǒng","กระบอก","Tube","我把各种铅笔整齐地放入桌上的笔筒里面。","Wǒ bǎ gèzhǒng qiānbǐ zhěngqí de fàngrù zhuōshàng de bǐtǒng lǐmiàn.","ฉันใส่ดินสอหลายชนิดลงกระบอกบนโต๊ะอย่างเป็นระเบียบ","I arrange my pencils neatly in the holder on my desk.","笔筒的筒","筒 有⺮和同","⺮ เกี่ยวกับไม้ไผ่ 同 ช่วยเสียง","⺮ relates to bamboo; 同 is a sound clue.","จัดเครื่องเขียน"],
+  ["笔筒","bǐtǒng","กระบอกใส่ปากกา","Pen holder","放学回家以后，我先把铅笔放回自己的笔筒。","Fàngxué huí jiā yǐhòu, wǒ xiān bǎ qiānbǐ fànghuí zìjǐ de bǐtǒng.","กลับบ้านฉันเก็บดินสอใส่กระบอกของตนก่อน","After school, I put my pencils back in their holder.","笔筒，毛笔的笔，竹筒的筒","笔 和 筒 都有⺮","笔 และ 筒 มีส่วนไผ่ ⺮","Both characters contain ⺮.","เก็บของให้เข้าที่"],
+  ["书桌","shūzhuō","โต๊ะเขียนหนังสือ","Study desk","每天完成作业以后，我都会认真整理自己的书桌。","Měitiān wánchéng zuòyè yǐhòu, wǒ dōu huì rènzhēn zhěnglǐ zìjǐ de shūzhuō.","หลังทำการบ้านฉันจัดโต๊ะทุกวัน","I tidy my desk carefully after finishing homework each day.","书桌，书本的书，桌子的桌","桌 下面是木","木 อยู่ล่างของ 桌 ชวนจำโต๊ะไม้","木 at the bottom suggests a wooden desk.","รับผิดชอบ"],
+  ["台灯","táidēng","โคมไฟตั้งโต๊ะ","Desk lamp","晚上读书的时候，我打开台灯让书本更加明亮。","Wǎnshang dúshū de shíhou, wǒ dǎkāi táidēng ràng shūběn gèngjiā míngliàng.","อ่านหนังสือตอนค่ำฉันเปิดไฟให้หนังสือสว่าง","I turn on my desk lamp to read at night.","台灯，平台的台，电灯的灯","灯 有火旁","火 ชวนจำแสง","火 suggests light.","ปิดไฟเมื่อไม่ใช้"],
+  ["书橱","shūchú","ตู้หนังสือ","Bookcase","妈妈和我一起把看完的故事书放回书橱里面。","Māma hé wǒ yìqǐ bǎ kànwán de gùshishū fànghuí shūchú lǐmiàn.","แม่กับฉันเก็บนิทานที่อ่านจบกลับตู้หนังสือ","Mom and I return finished storybooks to the bookcase.","书橱，书本的书，橱柜的橱","橱 有木旁","木 ชวนจำตู้ไม้","木 suggests wooden furniture.","รักหนังสือ"],
+  ["书包","shūbāo","กระเป๋านักเรียน","Schoolbag","每天睡觉之前，我都会检查书包里的学习用品。","Měitiān shuìjiào zhīqián, wǒ dōu huì jiǎnchá shūbāo li de xuéxí yòngpǐn.","ก่อนนอนฉันตรวจอุปกรณ์ในกระเป๋าทุกวัน","Before bed I check my school supplies every day.","书包，书本的书，包裹的包","包 有勹形外框","勹 เป็นกรอบห่อของ","勹 is a wrapping-shaped component.","เตรียมพร้อม"]
+]);
+
+export const p2Week2 = make(2, [
+  ["集","jí","รวบรวม","Collect","我们一起收集各种资料，然后认真整理学习记录。","Wǒmen yìqǐ shōují gèzhǒng zīliào, ránhòu rènzhēn zhěnglǐ xuéxí jìlù.","เรารวบรวมข้อมูลและจัดบันทึกการเรียนด้วยกัน","We collect materials together and organize our study records.","集邮的集","集 上隹下木","隹 อยู่บน 木 ล่าง","隹 is above 木.","จัดข้อมูล"],
+  ["邮","yóu","ไปรษณีย์","Mail","星期天，我和爸爸一起到邮局寄出问候卡片。","Xīngqītiān, wǒ hé bàba yìqǐ dào yóujú jìchū wènhòu kǎpiàn.","วันอาทิตย์ฉันกับพ่อไปส่งการ์ดที่ไปรษณีย์","On Sunday Dad and I mail greeting cards.","邮票的邮","邮 右边是阝","阝 อยู่ด้านขวาของ 邮","阝 is on the right.","ส่งความปรารถนาดี"],
+  ["集邮","jíyóu","สะสมแสตมป์","Collect stamps","爷爷喜欢集邮，也常常教我认识不同国家的邮票。","Yéye xǐhuan jíyóu, yě chángcháng jiāo wǒ rènshi bùtóng guójiā de yóupiào.","ปู่ชอบสะสมแสตมป์และสอนฉันรู้จักแสตมป์หลายประเทศ","Grandpa collects stamps and teaches me about stamps from different countries.","集邮，集合的集，邮票的邮","集 有木；邮 有阝","集 มี 木 และ 邮 มี 阝","集 has 木; 邮 has 阝.","เรียนรู้โลกกว้าง"],
+  ["报","bào","หนังสือพิมพ์ / รายงาน","News / report","老师请我们把今天的观察结果报告给全班同学。","Lǎoshī qǐng wǒmen bǎ jīntiān de guānchá jiéguǒ bàogào gěi quánbān tóngxué.","ครูขอให้รายงานผลสังเกตวันนี้แก่เพื่อนทั้งชั้น","The teacher asks us to report our observations to the class.","报纸的报","报 有扌","扌 อยู่ซ้ายของ 报","扌 is on the left.","รายงานตามจริง"],
+  ["读报","dúbào","อ่านหนังสือพิมพ์","Read the newspaper","早餐以后，爸爸和我一起读报，讨论今天的新闻。","Zǎocān yǐhòu, bàba hé wǒ yìqǐ dúbào, tǎolùn jīntiān de xīnwén.","หลังอาหารเช้าฉันกับพ่ออ่านหนังสือพิมพ์และคุยข่าววันนี้","After breakfast Dad and I read the newspaper and discuss the news.","读报，读书的读，报纸的报","读 有讠；报 有扌","读 มี 讠 ส่วน 报 มี 扌","读 has 讠; 报 has 扌.","ติดตามข่าวอย่างมีวิจารณญาณ"],
+  ["故事","gùshi","นิทาน / เรื่องราว","Story","每天晚上妹妹请我念一个有趣的故事。","Měitiān wǎnshang mèimei qǐng wǒ niàn yí ge yǒuqù de gùshi.","ทุกเย็นน้องสาวขอให้ฉันอ่านนิทานสนุก","Every evening my sister asks me to read an interesting story.","故事，故乡的故，事情的事","故 有古和攵","古 กับ 攵 เป็นส่วนของ 故","故 contains 古 and 攵.","อ่านกับครอบครัว"],
+  ["童话","tónghuà","นิทานเด็ก","Fairy tale","这篇童话让我明白帮助别人会带来快乐。","Zhè piān tónghuà ràng wǒ míngbai bāngzhù biérén huì dàilái kuàilè.","นิทานนี้สอนว่าการช่วยผู้อื่นนำความสุข","This fairy tale teaches me that helping others brings joy.","童话，儿童的童，说话的话","童 有立和里","童 มี 立 และ 里","童 contains 立 and 里.","มีน้ำใจ"],
+  ["词语","cíyǔ","คำศัพท์","Words","我们把今天学到的新词语写进自己的练习簿。","Wǒmen bǎ jīntiān xuédào de xīn cíyǔ xiějìn zìjǐ de liànxíbù.","เราเขียนคำใหม่วันนี้ลงสมุดฝึก","We write today's new vocabulary in our exercise books.","词语，词典的词，语言的语","词 和 语 都有讠","ทั้งคู่มี 讠 เกี่ยวกับภาษา","Both contain 讠, speech.","ทบทวน"],
+  ["句子","jùzi","ประโยค","Sentence","我用今天的新词语写出一个完整的句子。","Wǒ yòng jīntiān de xīn cíyǔ xiěchū yí ge wánzhěng de jùzi.","ฉันใช้คำใหม่วันนี้เขียนประโยคสมบูรณ์","I write a complete sentence with today's new words.","句子，句号的句，孩子的子","句 有勹和口","句 มี 勹 และ 口","句 contains 勹 and 口.","ฝึกเขียน"],
+  ["朗读","lǎngdú","อ่านออกเสียง","Read aloud","在小组学习时，我们轮流朗读课文并互相鼓励。","Zài xiǎozǔ xuéxí shí, wǒmen lúnliú lǎngdú kèwén bìng hùxiāng gǔlì.","เรียนกลุ่มเราผลัดอ่านออกเสียงและให้กำลังใจกัน","In group study we take turns reading and encourage each other.","朗读，晴朗的朗，读书的读","朗 有月；读 有讠","朗 มี 月 และ 读 มี 讠","朗 has 月; 读 has 讠.","กล้าอ่านออกเสียง"]
+]);
+
+export const p2Week3 = make(3, [
+  ["上","shàng","บน","Above","我把干净的课本放在书桌上，准备开始学习。","Wǒ bǎ gānjìng de kèběn fàng zài shūzhuō shàng, zhǔnbèi kāishǐ xuéxí.","ฉันวางหนังสือสะอาดบนโต๊ะเตรียมเรียน","I put my books on the desk to begin studying.","上面的上","上 短画在长横上方","ขีดสั้นอยู่เหนือเส้นยาว","The short stroke is above the baseline.","เก็บของ"],
+  ["下","xià","ล่าง","Below","下课后，我把书包放在桌子下面，避免挡路。","Xiàkè hòu, wǒ bǎ shūbāo fàng zài zhuōzi xiàmiàn, bìmiǎn dǎnglù.","หลังเรียนฉันวางกระเป๋าใต้โต๊ะไม่ขวางทาง","After class I put my bag below the desk to keep the path clear.","下面的下","下 短画在长横下方","ขีดสั้นอยู่ใต้เส้นยาว","The short stroke is below the baseline.","ไม่ขวางทาง"],
+  ["左","zuǒ","ซ้าย","Left","我把铅笔放在书的左边，方便自己拿取。","Wǒ bǎ qiānbǐ fàng zài shū de zuǒbian, fāngbiàn zìjǐ náqǔ.","ฉันวางดินสอทางซ้ายหนังสือเพื่อหยิบง่าย","I put my pencil to the left of the book for easy access.","左边的左","左 下面有工","工 อยู่ล่างของ 左","工 is at the bottom.","จัดของ"],
+  ["右","yòu","ขวา","Right","老师请我把作业簿放到桌子右边的角落。","Lǎoshī qǐng wǒ bǎ zuòyèbù fàngdào zhuōzi yòubian de jiǎoluò.","ครูให้ฉันวางสมุดการบ้านที่มุมขวาของโต๊ะ","The teacher asks me to place my exercise book in the right corner.","右边的右","右 下面有口","口 อยู่ล่างของ 右","口 is at the bottom.","ทำตามคำแนะนำ"],
+  ["中","zhōng","กลาง","Middle","我们把花盆放在桌子中间，让大家欣赏。","Wǒmen bǎ huāpén fàng zài zhuōzi zhōngjiān, ràng dàjiā xīnshǎng.","เราวางกระถางกลางโต๊ะให้ทุกคนชม","We put a flowerpot in the middle for everyone to enjoy.","中间的中","中 中间一竖穿过口","เส้นตั้งผ่านกลางกรอบ","A vertical line crosses the centre of 口.","แบ่งปันความสวยงาม"],
+  ["前","qián","หน้า","Front","上课之前，我站在教室前面向老师问好。","Shàngkè zhīqián, wǒ zhàn zài jiàoshì qiánmiàn xiàng lǎoshī wènhǎo.","ก่อนเรียนฉันยืนหน้าห้องทักทายครู","Before class I greet my teacher at the front of the classroom.","前面的前","前 右下有刂","刂 อยู่ด้านขวาล่าง","刂 is at the lower right.","สุภาพ"],
+  ["后","hòu","หลัง","Behind","我们排队时站在前面同学的后面，不推别人。","Wǒmen páiduì shí zhàn zài qiánmiàn tóngxué de hòumiàn, bù tuī biérén.","เราเข้าแถวหลังเพื่อนและไม่ผลักผู้อื่น","We stand behind the classmate ahead and do not push.","后面的后","后 下部有口","口 อยู่ส่วนล่าง","口 is in the lower part.","อดทนรอ"],
+  ["里面","lǐmiàn","ข้างใน","Inside","我把用完的彩色笔收进盒子里面，保持整齐。","Wǒ bǎ yòngwán de cǎisèbǐ shōujìn hézi lǐmiàn, bǎochí zhěngqí.","ฉันเก็บสีที่ใช้แล้วไว้ในกล่องให้เรียบร้อย","I put used coloured pens inside the box to keep things tidy.","里面，里外的里，面前的面","里 有田形和土形","里 มีรูป 田 และ 土","里 has 田- and 土-like parts.","จัดระเบียบ"],
+  ["外面","wàimiàn","ข้างนอก","Outside","下雨的时候，我们不在教室外面奔跑和玩耍。","Xiàyǔ de shíhou, wǒmen bú zài jiàoshì wàimiàn bēnpǎo hé wánshuǎ.","เมื่อฝนตกเราไม่วิ่งเล่นนอกห้องเรียน","When it rains, we do not run outside the classroom.","外面，外出的外，面前的面","外 有夕和卜","外 มี 夕 กับ 卜","外 contains 夕 and 卜.","เล่นอย่างปลอดภัย"],
+  ["旁边","pángbiān","ข้าง ๆ","Beside","我坐在新同学旁边，主动邀请他一起做练习。","Wǒ zuò zài xīn tóngxué pángbiān, zhǔdòng yāoqǐng tā yìqǐ zuò liànxí.","ฉันนั่งข้างเพื่อนใหม่และชวนทำแบบฝึก","I sit beside the new classmate and invite them to practise.","旁边，旁人的旁，边界的边","边 有辶和力","辶 ชวนจำการเคลื่อนไหว","辶 suggests movement.","ต้อนรับเพื่อนใหม่"]
+]);
+
+export const p2Week4 = make(4, [
+  ["尊","zūn","เคารพ","Respect","我们尊重每一位同学的意见，也接受不同想法。","Wǒmen zūnzhòng měi yí wèi tóngxué de yìjiàn, yě jiēshòu bùtóng xiǎngfǎ.","เราเคารพความเห็นเพื่อนและยอมรับความคิดต่าง","We respect classmates' opinions and accept different views.","尊重的尊","尊 下面有寸","寸 อยู่ล่างของ 尊","寸 is at the bottom.","เคารพความต่าง"],
+  ["敬","jìng","ให้เกียรติ","Respect","遇到社区的长辈时，我们会主动问候并表达敬意。","Yùdào shèqū de zhǎngbèi shí, wǒmen huì zhǔdòng wènhòu bìng biǎodá jìngyì.","เมื่อพบผู้ใหญ่ในชุมชนเราทักทายและให้เกียรติ","We greet and respect elders in our community.","尊敬的敬","敬 右有攵","攵 อยู่ด้านขวา","攵 is on the right.","ให้เกียรติ"],
+  ["孝敬","xiàojìng","เคารพและดูแลพ่อแม่","Care for parents","我们孝敬父母，平时主动关心他们，也照顾自己。","Wǒmen xiàojìng fùmǔ, píngshí zhǔdòng guānxīn tāmen, yě zhàogù zìjǐ.","เราดูแลพ่อแม่และตนเองในชีวิตประจำวัน","We care for our parents and look after ourselves too.","孝敬，孝顺的孝，尊敬的敬","孝 有子；敬 有攵","孝 มี 子 ส่วน 敬 มี 攵","孝 has 子; 敬 has 攵.","กตัญญูอย่างปลอดภัย"],
+  ["尊重","zūnzhòng","เคารพ","Respect","我们在讨论问题的时候，尊重同学不同的看法。","Wǒmen zài tǎolùn wèntí de shíhou, zūnzhòng tóngxué bùtóng de kànfǎ.","เมื่อถกปัญหาเราเคารพความคิดเห็นที่ต่างกัน","During discussion we respect classmates' differing views.","尊重，尊敬的尊，重要的重","尊 有寸；重 有多横","สังเกต 寸 และเส้นนอนของ 重","Notice 寸 and the horizontal strokes in 重.","รับฟัง"],
+  ["照顾","zhàogù","ดูแล","Take care of","奶奶生病的时候，我们轮流照顾她并主动帮忙。","Nǎinai shēngbìng de shíhou, wǒmen lúnliú zhàogù tā bìng zhǔdòng bāngmáng.","เมื่อย่าป่วยเราผลัดกันดูแลและช่วยเหลือ","When Grandma is ill we take turns caring for her.","照顾，照亮的照，照顾的顾","照 有灬；顾 有页","照 มี 灬 และ 顾 มี 页","照 has 灬; 顾 has 页.","เอาใจใส่"],
+  ["体谅","tǐliàng","เข้าใจและเห็นใจ","Be understanding","朋友心情不好时，我会体谅他并听他说话。","Péngyou xīnqíng bù hǎo shí, wǒ huì tǐliàng tā bìng tīng tā shuōhuà.","เพื่อนไม่สบายใจฉันเห็นใจและรับฟัง","When a friend is upset, I listen and show understanding.","体谅，身体的体，原谅的谅","体 有亻；谅 有讠","亻 คือคน 讠 คือคำพูด","亻 is person; 讠 is speech.","เข้าใจผู้อื่น"],
+  ["感恩","gǎn’ēn","สำนึกบุญคุณ","Gratitude","我们感恩家人的关爱，也用行动表达自己的谢意。","Wǒmen gǎn’ēn jiārén de guān’ài, yě yòng xíngdòng biǎodá zìjǐ de xièyì.","เราซาบซึ้งความรักของครอบครัวและแสดงผ่านการกระทำ","We appreciate our family's care and express gratitude through actions.","感恩，感动的感，恩情的恩","感 和 恩 都有心","ทั้งสองตัวมี 心 เกี่ยวกับความรู้สึก","Both contain 心, heart.","ขอบคุณคนรอบตัว"],
+  ["责任","zérèn","ความรับผิดชอบ","Responsibility","认真完成自己的作业和家务是每天的责任。","Rènzhēn wánchéng zìjǐ de zuòyè hé jiāwù shì měitiān de zérèn.","ทำการบ้านและงานบ้านอย่างตั้งใจคือความรับผิดชอบทุกวัน","Completing homework and chores carefully is a daily responsibility.","责任，负责的责，任务的任","责 有贝；任 有亻","责 มี 贝 และ 任 มี 亻","责 has 贝; 任 has 亻.","รับผิดชอบ"],
+  ["互助","hùzhù","ช่วยเหลือกัน","Mutual help","班级里的同学互助合作，一起完成今天的学习任务。","Bānjí li de tóngxué hùzhù hézuò, yìqǐ wánchéng jīntiān de xuéxí rènwu.","เพื่อนในชั้นช่วยกันทำงานเรียนวันนี้","Classmates help each other finish today's learning task.","互助，互相的互，帮助的助","助 有且和力","力 ชวนจำการลงแรงช่วย","力 suggests effort.","ร่วมมือ"],
+  ["家务","jiāwù","งานบ้าน","Household chores","周末我主动做家务，让家人多一点休息时间。","Zhōumò wǒ zhǔdòng zuò jiāwù, ràng jiārén duō yìdiǎn xiūxi shíjiān.","วันหยุดฉันช่วยงานบ้านให้ครอบครัวพักมากขึ้น","On weekends I help with chores so family can rest more.","家务，家人的家，任务的务","家 有宀；务 有力","宀 ชวนจำบ้าน 力 คือแรง","宀 suggests home; 力 means effort.","ช่วยงานบ้าน"]
+]);
+
+export const p2Week5 = make(5, [
+  ["清","qīng","ใส / สะอาด","Clear","我们观察池塘里清澈的水，并记录看到的小动物。","Wǒmen guānchá chítáng li qīngchè de shuǐ, bìng jìlù kàndào de xiǎodòngwù.","เราสังเกตน้ำใสในบ่อและจดสัตว์ตัวเล็กที่เห็น","We observe the clear pond and record the animals we see.","清水的清","清 有氵和青","氵 ชวนจำกับน้ำ 青 ช่วยเสียง","氵 suggests water; 青 is a sound clue.","รักษาน้ำ"],
+  ["晴","qíng","แดดออก","Sunny","天气晴朗的时候，我们一起到操场做有趣的活动。","Tiānqì qínglǎng de shíhou, wǒmen yìqǐ dào cāochǎng zuò yǒuqù de huódòng.","วันฟ้าใสเราไปทำกิจกรรมที่สนามด้วยกัน","On sunny days we do fun activities on the field.","晴天的晴","晴 有日和青","日 คือดวงอาทิตย์ 青 ช่วยเสียง","日 means sun; 青 is a sound clue.","เล่นกลางแจ้งปลอดภัย"],
+  ["情","qíng","ความรู้สึก","Feeling","我们应该认真倾听朋友的心情，给予适当的安慰。","Wǒmen yīnggāi rènzhēn qīngtīng péngyou de xīnqíng, jǐyǔ shìdàng de ānwèi.","เราควรรับฟังความรู้สึกเพื่อนและปลอบใจ","We should listen to friends' feelings and comfort them.","心情的情","情 有忄和青","忄 เกี่ยวกับใจ 青 ช่วยเสียง","忄 relates to feelings; 青 is a sound clue.","รับฟังความรู้สึก"],
+  ["请","qǐng","กรุณา","Please","借同学的东西之前，我会礼貌地请求同意。","Jiè tóngxué de dōngxi zhīqián, wǒ huì lǐmào de qǐngqiú tóngyì.","ก่อนยืมของเพื่อนฉันขออนุญาตอย่างสุภาพ","Before borrowing a friend's things, I politely ask permission.","请问的请","请 有讠和青","讠 เกี่ยวกับคำพูด 青 ช่วยเสียง","讠 relates to speech; 青 is a sound clue.","ขออนุญาต"],
+  ["睛","jīng","ลูกตา","Eye","我保护自己的眼睛，不长时间盯着屏幕。","Wǒ bǎohù zìjǐ de yǎnjing, bù cháng shíjiān dīngzhe píngmù.","ฉันดูแลตาและไม่จ้องจอนาน","I protect my eyes and avoid staring at screens for too long.","眼睛的睛","睛 有目和青","目 คือตา 青 ช่วยจำรูป","目 means eye; 青 is a form clue.","พักสายตา"],
+  ["青","qīng","เขียวอมน้ำเงิน","Blue-green","下雨以后，校园里一片青青的草地显得格外漂亮。","Xiàyǔ yǐhòu, xiàoyuán li yí piàn qīngqīng de cǎodì xiǎnde géwài piàoliang.","หลังฝนตกสนามหญ้าเขียวสวยเป็นพิเศษ","After rain, the green school lawn looks especially beautiful.","青草的青","青 上有三横，下部月形","青 มีเส้นนอนด้านบนและรูป 月 ด้านล่าง","青 has horizontal strokes above a 月-shaped part.","รักพื้นที่เขียว"],
+  ["清洁","qīngjié","ความสะอาด","Cleanliness","值日生认真清洁课室，让大家有舒服的学习环境。","Zhírìshēng rènzhēn qīngjié kèshì, ràng dàjiā yǒu shūfu de xuéxí huánjìng.","เวรประจำวันทำความสะอาดห้องให้ทุกคนเรียนสบาย","Class monitors clean the classroom for a pleasant learning environment.","清洁，清水的清，整洁的洁","清 和 洁 都有氵","ทั้งสองตัวมี 氵","Both contain 氵.","รักษาความสะอาด"],
+  ["晴朗","qínglǎng","อากาศแจ่มใส","Clear weather","星期六的天气十分晴朗，我们和家人到公园散步。","Xīngqīliù de tiānqì shífēn qínglǎng, wǒmen hé jiārén dào gōngyuán sànbù.","วันเสาร์อากาศดีเราไปเดินสวนกับครอบครัว","Saturday is sunny, so we walk in the park with family.","晴朗，晴天的晴，朗读的朗","晴 有日；朗 有月","晴 มี 日 และ 朗 มี 月","晴 has 日; 朗 has 月.","ใช้เวลากับครอบครัว"],
+  ["心情","xīnqíng","อารมณ์ / ความรู้สึก","Mood","心情不好时，我会找信任的大人说说话。","Xīnqíng bù hǎo shí, wǒ huì zhǎo xìnrèn de dàrén shuōshuo huà.","เมื่ออารมณ์ไม่ดีฉันคุยกับผู้ใหญ่ที่ไว้ใจ","When upset, I talk to a trusted adult.","心情，心脏的心，感情的情","心 和 情 的忄有关","心 และ 忄 เกี่ยวข้องกับใจ","心 and 忄 relate to feelings.","บอกความรู้สึก"],
+  ["请求","qǐngqiú","ขอร้อง / ขออนุญาต","Request","我向老师提出礼貌的请求，希望借一本故事书。","Wǒ xiàng lǎoshī tíchū lǐmào de qǐngqiú, xīwàng jiè yì běn gùshishū.","ฉันขอครูอย่างสุภาพเพื่อยืมนิทาน","I politely ask my teacher to borrow a storybook.","请求，请问的请，要求的求","请 有讠","讠 เกี่ยวกับคำพูด","讠 relates to speech.","ขออย่างสุภาพ"]
+]);
+
+export const p2Week6 = make(6, [
+  ["园","yuán","สวน","Garden","我们一起参观校园的小花园，仔细观察植物的生长。","Wǒmen yìqǐ cānguān xiàoyuán de xiǎohuāyuán, zǐxì guānchá zhíwù de shēngzhǎng.","เราเยี่ยมชมสวนโรงเรียนและสังเกตการเติบโตของพืช","We visit the school garden and observe plant growth.","公园的园","园 有囗和元","囗 เป็นกรอบล้อมสวน 元 ช่วยเสียง","囗 encloses the garden; 元 is a sound clue.","รักษาสวน"],
+  ["植","zhí","ปลูก","Plant","老师教我们把幼苗种植在土里，再轻轻浇水。","Lǎoshī jiāo wǒmen bǎ yòumiáo zhòngzhí zài tǔ li, zài qīngqīng jiāoshuǐ.","ครูสอนปลูกต้นกล้าลงดินและรดน้ำเบา ๆ","The teacher shows us how to plant seedlings and water them.","植物的植","植 有木和直","木 เกี่ยวกับพืช 直 ช่วยเสียง","木 relates to plants; 直 is a sound clue.","ดูแลต้นกล้า"],
+  ["环","huán","วง / รอบ","Ring / surroundings","为了保护校园环境，我们每天都把垃圾分类放好。","Wèile bǎohù xiàoyuán huánjìng, wǒmen měitiān dōu bǎ lājī fēnlèi fànghǎo.","เพื่อรักษาสิ่งแวดล้อมโรงเรียนเราแยกขยะทุกวัน","To protect our school environment, we sort waste daily.","环境的环","环 有王形旁和不","环 มีส่วน 王 และ 不","环 contains a 王-shaped element and 不.","แยกขยะ"],
+  ["境","jìng","สภาพแวดล้อม","Surroundings","大家共同努力，为校园创造干净又安全的学习环境。","Dàjiā gòngtóng nǔlì, wèi xiàoyuán chuàngzào gānjìng yòu ānquán de xuéxí huánjìng.","ทุกคนร่วมสร้างสภาพแวดล้อมเรียนที่สะอาดปลอดภัย","Together we make school a clean and safe learning environment.","环境的境","境 有土和竟","土 เกี่ยวกับพื้นที่ 竟 ช่วยเสียง","土 relates to ground; 竟 is a sound clue.","ร่วมมือ"],
+  ["种","zhòng","ปลูก","Plant / sow","周末的时候，我和外婆一起在花盆里种小花。","Zhōumò de shíhou, wǒ hé wàipó yìqǐ zài huāpén li zhòng xiǎohuā.","วันหยุดฉันกับยายปลูกดอกไม้ในกระถาง","At the weekend Grandma and I plant flowers in pots.","种花的种，第四声","种 有禾和中","禾 เกี่ยวกับพืช สังเกตเสียงที่สี่","禾 relates to plants; note the fourth tone.","รักพืช"],
+  ["护","hù","ปกป้อง","Protect","为了保护小动物，我们不随意破坏它们的住处。","Wèile bǎohù xiǎodòngwù, wǒmen bù suíyì pòhuài tāmen de zhùchù.","เพื่อปกป้องสัตว์เล็กเราไม่ทำลายบ้านมัน","To protect little animals we avoid destroying their homes.","保护的护","护 有扌和户","扌 เกี่ยวกับการกระทำ 户 ช่วยเสียง","扌 relates to action; 户 is a sound clue.","ปกป้องสัตว์"],
+  ["植物","zhíwù","พืช","Plant","植物需要合适的阳光和水分，才能慢慢长大。","Zhíwù xūyào héshì de yángguāng hé shuǐfèn, cái néng mànmàn zhǎngdà.","พืชต้องการแสงและน้ำเหมาะสมจึงเติบโต","Plants need suitable sunlight and water to grow.","植物，种植的植，物品的物","植 有木；物 有牜","植 มี 木 ส่วน 物 มี 牜","植 has 木; 物 has 牜.","เข้าใจธรรมชาติ"],
+  ["环境","huánjìng","สิ่งแวดล้อม","Environment","我们爱护学校的环境，不随地丢垃圾或乱画墙壁。","Wǒmen àihù xuéxiào de huánjìng, bù suídì diū lājī huò luànhuà qiángbì.","เราดูแลโรงเรียนไม่ทิ้งขยะหรือขีดผนัง","We care for school by not littering or scribbling on walls.","环境，循环的环，边境的境","境 有土","土 ชวนจำพื้นที่รอบตัว","土 reminds us of the ground around us.","รักษาส่วนรวม"],
+  ["垃圾","lājī","ขยะ","Rubbish","午餐以后，我们把自己的垃圾放进合适的垃圾桶。","Wǔcān yǐhòu, wǒmen bǎ zìjǐ de lājī fàngjìn héshì de lājītǒng.","หลังมื้อเที่ยงเราเอาขยะใส่ถังที่เหมาะสม","After lunch we put rubbish in the appropriate bin.","垃圾，垃圾的垃，垃圾的圾","垃 和 圾 都有土旁","ทั้งสองตัวมี 土","Both have 土.","ทิ้งขยะให้ถูกที่"],
+  ["保护","bǎohù","ปกป้อง","Protect","我们应该尽力保护动物和植物共同生活的自然环境。","Wǒmen yīnggāi jìnlì bǎohù dòngwù hé zhíwù gòngtóng shēnghuó de zìrán huánjìng.","เราควรปกป้องธรรมชาติที่สัตว์และพืชอยู่ร่วมกัน","We should protect the natural habitat shared by animals and plants.","保护，保证的保，爱护的护","保 有亻；护 有扌","保 มี 亻 และ 护 มี 扌","保 has 亻; 护 has 扌.","รักษาธรรมชาติ"]
+]);
+
+export const p2Week7 = make(7, [
+  ["安","ān","ปลอดภัย / สงบ","Safe / peace","放学的时候，我们在安全的地方等待家人来接。","Fàngxué de shíhou, wǒmen zài ānquán de dìfang děngdài jiārén lái jiē.","หลังเลิกเรียนเรารอครอบครัวในที่ปลอดภัย","After school we wait somewhere safe for family to collect us.","安全的安","安 有宀和女","宀 คล้ายหลังคา 女 อยู่ล่าง","宀 resembles a roof above 女.","รอในที่ปลอดภัย"],
+  ["全","quán","ทั้งหมด / ครบ","Whole","老师请全班同学认真学习过马路的安全规则。","Lǎoshī qǐng quánbān tóngxué rènzhēn xuéxí guò mǎlù de ānquán guīzé.","ครูให้ทุกคนเรียนกฎข้ามถนนปลอดภัย","The teacher asks everyone to learn road safety rules.","全部的全","全 上部人形，下部王形","全 มีรูป 人 บน 王 ล่าง","全 has 人-shaped and 王-shaped parts.","ทุกคนร่วมรักษาความปลอดภัย"],
+  ["规","guī","กฎ","Rule","我们在校园里遵守共同制定的规则，互相提醒。","Wǒmen zài xiàoyuán li zūnshǒu gòngtóng zhìdìng de guīzé, hùxiāng tíxǐng.","เราเคารพกฎโรงเรียนที่ตกลงร่วมกันและเตือนกัน","We follow shared school rules and remind each other.","规则的规","规 有夫和见","规 มี 夫 กับ 见","规 contains 夫 and 见.","เคารพกฎ"],
+  ["守","shǒu","รักษา / ปฏิบัติตาม","Keep / obey","我们遵守约定的时间，不让等待的人太久。","Wǒmen zūnshǒu yuēdìng de shíjiān, bú ràng děngdài de rén tài jiǔ.","เรารักษาเวลานัดไม่ให้คนรอนาน","We keep agreed times so others do not wait too long.","遵守的守","守 有宀和寸","宀 กับ 寸 ประกอบเป็น 守","守 contains 宀 and 寸.","รักษาเวลา"],
+  ["路","lù","ถนน / ทาง","Road","过马路之前，我们会先停下观察来往的车辆。","Guò mǎlù zhīqián, wǒmen huì xiān tíngxià guānchá láiwǎng de chēliàng.","ก่อนข้ามถนนเราหยุดมองรถที่ผ่านไปมา","Before crossing, we stop and observe passing traffic.","马路的路","路 有足旁和各","足 เกี่ยวกับการเดิน","足 relates to walking.","ข้ามถนนกับผู้ใหญ่"],
+  ["灯","dēng","โคมไฟ / ไฟ","Lamp / light","看到红灯亮起，我们就在人行道旁耐心等待。","Kàndào hóngdēng liàngqǐ, wǒmen jiù zài rénxíngdào páng nàixīn děngdài.","เมื่อไฟแดงติดเรารอริมทางอย่างอดทน","When the red light turns on, we wait patiently at the side of the road.","电灯的灯","灯 有火和丁","火 ช่วยจำแสง 丁 ช่วยเสียง","火 suggests light; 丁 is a sound clue.","รอสัญญาณ"],
+  ["安全","ānquán","ความปลอดภัย","Safety","参加户外活动时，我们要注意自己和同伴的安全。","Cānjiā hùwài huódòng shí, wǒmen yào zhùyì zìjǐ hé tóngbàn de ānquán.","ทำกิจกรรมกลางแจ้งเราระวังความปลอดภัยของตนและเพื่อน","During outdoor activities we care about our own and our friends' safety.","安全，平安的安，全部的全","安 有宀，想象安全的家","宀 ชวนจำบ้านปลอดภัย","宀 suggests a safe home.","ดูแลความปลอดภัย"],
+  ["规则","guīzé","กฎเกณฑ์","Rules","大家一起讨论班级规则，并决定如何公平地遵守。","Dàjiā yìqǐ tǎolùn bānjí guīzé, bìng juédìng rúhé gōngpíng de zūnshǒu.","เราคุยกฎห้องเรียนและตกลงปฏิบัติอย่างยุติธรรม","We discuss class rules and agree how to follow them fairly.","规则，规定的规，原则的则","则 有贝和刂","则 มี 贝 กับ 刂","则 contains 贝 and 刂.","ยุติธรรม"],
+  ["遵守","zūnshǒu","ปฏิบัติตาม","Follow","进入图书馆以后，我们遵守规定并轻声说话。","Jìnrù túshūguǎn yǐhòu, wǒmen zūnshǒu guīdìng bìng qīngshēng shuōhuà.","เมื่อเข้าห้องสมุดเราทำตามกฎและพูดเบา ๆ","After entering the library we follow the rules and speak quietly.","遵守，遵循的遵，守约的守","遵 有辶和尊","辶 ชวนจำการติดตาม 尊 ช่วยเสียง","辶 suggests following; 尊 is a sound clue.","เคารพส่วนรวม"],
+  ["交通","jiāotōng","การจราจร","Traffic","我们和老师一起学习交通知识，并练习辨认常见标志。","Wǒmen hé lǎoshī yìqǐ xuéxí jiāotōng zhīshi, bìng liànxí biànrèn chángjiàn biāozhì.","เราเรียนการจราจรกับครูและฝึกอ่านป้ายทั่วไป","We learn traffic knowledge with the teacher and practise identifying common signs.","交通，交朋友的交，通过的通","通 有辶","辶 เกี่ยวกับการเดินทาง","辶 relates to movement.","เดินทางปลอดภัย"]
+]);
+
+export const p2Week8 = make(8, [
+  ["勤","qín","ขยัน","Diligent","勤劳的同学每天认真完成任务，也乐于帮助别人。","Qínláo de tóngxué měitiān rènzhēn wánchéng rènwu, yě lèyú bāngzhù biérén.","เพื่อนขยันทำงานทุกวันและยินดีช่วยผู้อื่น","A diligent classmate completes tasks and helps others each day.","勤劳的勤","勤 右边有力","力 ช่วยจำความพยายาม","力 suggests effort.","ขยัน"],
+  ["俭","jiǎn","ประหยัด","Frugal","我们学习节俭，买东西之前先想想是否真的需要。","Wǒmen xuéxí jiéjiǎn, mǎi dōngxi zhīqián xiān xiǎngxiang shìfǒu zhēn de xūyào.","เราฝึกประหยัด คิดก่อนซื้อว่าจำเป็นจริงไหม","We practise thrift by thinking before buying.","节俭的俭","俭 有亻和佥","亻 เกี่ยวกับคน 佥 ช่วยเสียง","亻 relates to people; 佥 is a sound clue.","ใช้เงินพอดี"],
+  ["节","jié","ประหยัด / ช่วง","Save / section","我们每天节约用水，洗手以后记得把水龙头关紧。","Wǒmen měitiān jiéyuē yòngshuǐ, xǐshǒu yǐhòu jìde bǎ shuǐlóngtóu guānjǐn.","เราประหยัดน้ำและปิดก๊อกหลังล้างมือ","We save water and turn off the tap after washing hands.","节约的节","节 上面是艹","艹 อยู่ด้านบนของ 节","艹 is at the top.","ประหยัดทรัพยากร"],
+  ["约","yuē","นัด / ตกลง","Agreement","我和同学约好时间一起复习，所以提前准备课本。","Wǒ hé tóngxué yuēhǎo shíjiān yìqǐ fùxí, suǒyǐ tíqián zhǔnbèi kèběn.","ฉันนัดเพื่อนทบทวนจึงเตรียมหนังสือก่อน","I arrange study time with a classmate and prepare books in advance.","约定的约","约 有纟和勺","约 มี 纟 และ 勺","约 contains 纟 and 勺.","รักษานัด"],
+  ["惜","xī","เห็นคุณค่า","Cherish","我们珍惜每一本课本，用完以后小心地放回书架。","Wǒmen zhēnxī měi yì běn kèběn, yòngwán yǐhòu xiǎoxīn de fànghuí shūjià.","เราเห็นคุณค่าหนังสือและเก็บเข้าชั้นอย่างระวัง","We value every textbook and return it carefully.","珍惜的惜","惜 有忄和昔","忄 เกี่ยวกับใจ 昔 ช่วยเสียง","忄 relates to feelings; 昔 is a sound clue.","เห็นคุณค่าของ"],
+  ["努","nǔ","พยายาม","Strive","遇到难题，我会努力思考并请老师指导。","Yùdào nántí, wǒ huì nǔlì sīkǎo bìng qǐng lǎoshī zhǐdǎo.","เมื่อเจอโจทย์ยากฉันพยายามคิดและขอครูแนะนำ","When I face a hard question, I think hard and ask for guidance.","努力的努","努 下面有力","力 คือแรง ช่วยจำความพยายาม","力 means strength and suggests effort.","ไม่ยอมแพ้"],
+  ["勤劳","qínláo","ขยันหมั่นเพียร","Hardworking","我学习勤劳的家人，主动完成自己的事情。","Wǒ xuéxí qínláo de jiārén, zhǔdòng wánchéng zìjǐ de shìqing.","ฉันเรียนรู้จากครอบครัวขยันและทำสิ่งของตนเอง","I learn from my hardworking family and complete my own tasks.","勤劳，勤奋的勤，劳动的劳","勤 和 劳 都有力","ทั้งสองตัวมี 力","Both contain 力.","ช่วยตนเอง"],
+  ["节俭","jiéjiǎn","มัธยัสถ์","Thrifty","我们养成节俭的习惯，把有用的物品保存起来。","Wǒmen yǎngchéng jiéjiǎn de xíguàn, bǎ yǒuyòng de wùpǐn bǎocún qǐlái.","เราฝึกประหยัดโดยเก็บสิ่งของที่ยังใช้ได้","We develop thrift by keeping useful belongings.","节俭，节约的节，俭朴的俭","节 有艹；俭 有亻","节 มี 艹 และ 俭 มี 亻","节 has 艹; 俭 has 亻.","ไม่ฟุ่มเฟือย"],
+  ["珍惜","zhēnxī","ถนอมและเห็นคุณค่า","Treasure","我珍惜和朋友学习的时间，认真听他们说话。","Wǒ zhēnxī hé péngyou xuéxí de shíjiān, rènzhēn tīng tāmen shuōhuà.","ฉันเห็นคุณค่าเวลาเรียนกับเพื่อนและตั้งใจฟังเขา","I treasure time studying with friends and listen to them.","珍惜，珍贵的珍，爱惜的惜","珍 有王形旁；惜 有忄","珍 มีส่วนหยก และ 惜 มี 忄","珍 has a jade-shaped component; 惜 has 忄.","เห็นคุณค่ามิตรภาพ"],
+  ["努力","nǔlì","พยายาม","Make an effort","只要每天努力学习新的知识，我们就会慢慢进步。","Zhǐyào měitiān nǔlì xuéxí xīn de zhīshi, wǒmen jiù huì mànmàn jìnbù.","หากพยายามเรียนรู้ทุกวันเราจะค่อย ๆ ก้าวหน้า","If we work hard at learning daily, we will gradually improve.","努力，努力的努，力量的力","努 和 力 都有力","努 มี 力 และ 力 เป็นตัวอักษรเดี่ยว","努 contains 力, also a standalone character.","พยายามสม่ำเสมอ"]
+]);
+
+export const vocabP2:P2Word[] = [
+  ...p2Week1,
+  ...p2Week2,
+  ...p2Week3,
+  ...p2Week4,
+  ...p2Week5,
+  ...p2Week6,
+  ...p2Week7,
+  ...p2Week8
+];
+export function getP2WeekVocab(week:number){return vocabP2.filter(word=>word.week===week);}
+export default vocabP2;

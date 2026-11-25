@@ -1,7 +1,7 @@
 // Offline checks for the enriched curriculum, local stroke assets and arcade puzzle coverage.
 const assert=require('node:assert/strict');const fs=require('node:fs');const path=require('node:path');const ts=require('typescript');const vm=require('node:vm');
 const root=path.resolve(__dirname,'..');
-const source=fs.readFileSync(path.join(root,'src/data/sampleVocab.ts'),'utf8');const mod={exports:{}};
+const source=fs.readFileSync(path.join(root,'src/data/starterVocab.ts'),'utf8');const mod={exports:{}};
 new Function('exports',ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(mod.exports);
 const {sampleVocab,vocabForGrade,grades}=mod.exports;
 assert.equal(sampleVocab.length,60);assert.equal(new Set(sampleVocab.map(w=>w.id)).size,60);

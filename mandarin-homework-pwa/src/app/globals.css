@@ -3,6 +3,66 @@
 @tailwind utilities;
 body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans Thai',sans-serif}button:focus-visible{outline:3px solid #d97706;outline-offset:2px}button{touch-action:manipulation}
 
+/* Warm, playful learning palette; print media keeps paper worksheets clean. */
+@media screen {
+  body{background:#fff8e8;color:#233b50}
+  .kids-app{background:radial-gradient(ellipse at 12% 7%,#ffe8a8 0,transparent 34%),radial-gradient(ellipse at 95% 27%,#c6f0ff 0,transparent 32%),linear-gradient(150deg,#fff8e8,#f0fff7 58%,#eaf7ff);color:#233b50}
+  .kid-header{background:rgba(255,250,235,.97);border-bottom:3px solid #bce8df;box-shadow:0 3px 12px #46796315}
+  .kid-hero{background:radial-gradient(circle at 80% 25%,#fff1a3 0,transparent 22%),linear-gradient(125deg,#c7f2ff,#bdf0cd 58%,#ffefaa);border:2px solid #96d5c3;box-shadow:0 5px 0 #aadac8;color:#194b48}
+  .kid-card,.kids-app article:not(#writing-worksheet):not(#worksheet-hub-print){border-radius:24px;border-color:#cce8e3;box-shadow:0 4px 0 #c9e6de,0 8px 20px #386a8010}
+  .kids-app button[class*="rounded"],.kid-button{box-shadow:0 3px 0 #37596824;transition:transform .12s ease,box-shadow .12s ease,background-color .15s ease}
+  .kids-app button:not(:disabled):active,.kid-button:active{transform:translateY(2px);box-shadow:0 1px 0 #37596824}
+  .kids-app button:disabled{box-shadow:none}
+  .kids-app button.bg-emerald-700,.kids-app a.bg-emerald-700,.kids-app button.bg-emerald-600{background:#278e72;color:white}
+  .kids-app nav{background:#fffdf4;border-top:3px solid #bce8df;box-shadow:0 -5px 20px #367e6315}
+  .kids-app nav button[aria-current="page"]{background:#c0efdc;color:#155b4a;box-shadow:0 3px 0 #94d4c3}
+  .kids-app .kid-game-card{border:2px solid #d1e7e3;box-shadow:0 5px 0 #c8e6dc;transition:transform .2s}
+  .kids-app .kid-game-card:nth-child(6n+1){background:#e0f6ff}.kids-app .kid-game-card:nth-child(6n+2){background:#f2eaff}.kids-app .kid-game-card:nth-child(6n+3){background:#def8e9}.kids-app .kid-game-card:nth-child(6n+4){background:#fff2bc}.kids-app .kid-game-card:nth-child(6n+5){background:#d9f4ff}.kids-app .kid-game-card:nth-child(6n+6){background:#ffe4eb}
+}
+.grade-badge{color:#254452;border:2px solid #fff;box-shadow:0 3px 0 #37596828;background:var(--grade-bg)}
+.grade-badge[data-grade="1"]{--grade-bg:#ffd7e0}.grade-badge[data-grade="2"]{--grade-bg:#ffe58d}.grade-badge[data-grade="3"]{--grade-bg:#c4f0d2}.grade-badge[data-grade="4"]{--grade-bg:#bce8ff}.grade-badge[data-grade="5"]{--grade-bg:#e0d4ff}.grade-badge[data-grade="6"]{--grade-bg:#ffd7b3}
+.grade-badge[aria-pressed="true"]{outline:2px solid #247b66;outline-offset:2px;box-shadow:0 4px 0 #247b6640;transform:translateY(-1px)}
+.word-cartoon-wrapper{max-width:340px;margin:0 auto 1rem}.word-cartoon-button{display:block;width:100%;border-radius:22px;overflow:hidden;background:#e8f7ff;border:2px solid #a4dcf4;box-shadow:0 4px 0 #9ad7ed}.word-cartoon-svg{display:block;width:100%;height:auto;max-height:220px;overflow:hidden}.cartoon-play-label{display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.45rem .5rem;font-size:.78rem;font-weight:900;color:#225873;background:#d9f4ff}
+.cartoon-idle{animation:cartoon-float 2.8s ease-in-out infinite}.cartoon-pop{animation:cartoon-bounce .65s cubic-bezier(.2,.7,.3,1.2) both,cartoon-float 2.8s ease-in-out .65s infinite}.cartoon-wave{transform-box:fill-box;transform-origin:bottom left;animation:cartoon-wave 1.4s ease-in-out infinite}.cartoon-raindrop{animation:rain-drip 1s linear infinite}.mascot-float{animation:cartoon-float 3s ease-in-out infinite}.direction-move{animation:direction-travel .8s cubic-bezier(.22,.68,.32,1.1) forwards}.active-writing-box{outline:3px solid #facc15;outline-offset:3px;box-shadow:0 0 0 6px #fff3aa,0 0 20px #fbbf24aa;animation:writing-glow 1.8s ease-in-out infinite}
+@keyframes cartoon-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes cartoon-bounce{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-13px) rotate(-6deg)}55%{transform:translateY(2px) rotate(6deg)}75%{transform:translateY(-6px) rotate(-3deg)}}
+@keyframes cartoon-wave{0%,100%{transform:rotate(0)}50%{transform:rotate(16deg)}}
+@keyframes rain-drip{0%{transform:translateY(-5px);opacity:.3}100%{transform:translateY(9px);opacity:1}}
+@keyframes direction-travel{from{transform:translate(0,68px)}to{transform:translate(var(--dx),var(--dy))}}
+@keyframes writing-glow{50%{box-shadow:0 0 0 6px #fff3aa,0 0 26px #fbbf24}}
+.chant-panda{animation:chant-bounce var(--chant-beat,.65s) ease-in-out infinite}
+@keyframes chant-bounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-7px) rotate(3deg)}}
+@media(prefers-reduced-motion:reduce){.chant-panda{animation:none!important}}
+.song-stage .song-bounce,.song-stage .song-wave,.song-stage .song-star,.song-stage .song-bow,.song-stage .song-cuddle,.song-stage .song-clap-left,.song-stage .song-clap-right,.song-stage .song-stomp,.song-stage .song-steam,.song-stage .song-hug{transform-box:fill-box;transform-origin:center}
+.song-playing .song-bounce{animation:song-bounce var(--song-beat) ease-in-out infinite}
+.song-playing .song-wave{animation:song-wave var(--song-beat) ease-in-out infinite}
+.song-playing .song-star{animation:song-glow var(--song-beat) ease-in-out infinite}
+.song-playing .song-bow{animation:song-bow calc(var(--song-beat)*2) ease-in-out infinite;transform-origin:center bottom}
+.song-playing .song-cuddle{animation:song-cuddle calc(var(--song-beat)*2) ease-in-out infinite}
+.song-playing .song-clap-left{animation:song-clap-left var(--song-beat) ease-in-out infinite}
+.song-playing .song-clap-right{animation:song-clap-right var(--song-beat) ease-in-out infinite}
+.song-playing .song-stomp{animation:song-stomp var(--song-beat) ease-in-out infinite}
+.song-playing .song-steam{animation:song-steam calc(var(--song-beat)*2) ease-out infinite}
+.song-playing .song-hug{animation:song-hug calc(var(--song-beat)*2) ease-in-out infinite}
+.song-playing .song-delay{animation-delay:calc(var(--song-beat)*-.5)}
+@keyframes song-bounce{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@keyframes song-wave{0%,100%{rotate:0deg}50%{rotate:25deg}}
+@keyframes song-glow{0%,100%{opacity:1;filter:drop-shadow(0 0 2px #ffe17a)}50%{opacity:.65;filter:drop-shadow(0 0 8px #ffbf30)}}
+@keyframes song-bow{0%,100%{rotate:0deg}50%{rotate:13deg}}
+@keyframes song-cuddle{0%,100%{translate:0 0}50%{translate:-7px 0}}
+@keyframes song-clap-left{0%,100%{translate:0 0}50%{translate:16px 0}}
+@keyframes song-clap-right{0%,100%{translate:0 0}50%{translate:-16px 0}}
+@keyframes song-stomp{0%,100%{translate:0 0}45%{translate:0 -7px}65%{translate:0 2px}}
+@keyframes song-steam{0%{opacity:.7;translate:0 3px}100%{opacity:0;translate:0 -7px}}
+@keyframes song-hug{0%,100%{rotate:0deg}50%{rotate:-30deg}}
+@media(prefers-reduced-motion:reduce){.song-stage *{animation:none!important}}
+.pinyin-choice[aria-pressed="true"]{box-shadow:0 3px 0 #25886a66;transform:translateY(-1px)}
+.pinyin-choice:disabled{cursor:not-allowed;box-shadow:none!important;transform:none!important}
+.pinyin-track-panda{width:30px;height:30px;overflow:visible}
+.pinyin-tone-card[aria-pressed="true"]{box-shadow:0 4px 0 #99d7c4}
+.pinyin-lab [data-mouth-phase="initial"]{filter:drop-shadow(0 1px 2px #f5b8cc44)}
+@media(prefers-reduced-motion:reduce){.cartoon-idle,.cartoon-pop,.cartoon-wave,.cartoon-raindrop,.mascot-float,.active-writing-box{animation:none!important}.direction-move{animation:none!important;transform:translate(var(--dx),var(--dy))}.kids-app button,.kid-button{transition:none!important}}
+
 @media print {
   @page { size:A4; margin:12mm; }
   body:has(#writing-worksheet) *:not(:has(#writing-worksheet)):not(#writing-worksheet):not(#writing-worksheet *) { display:none !important; }
