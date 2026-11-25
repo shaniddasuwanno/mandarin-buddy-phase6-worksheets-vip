@@ -4,7 +4,7 @@
  */
 export type SongNote={pitch:string;frequency:number;beats:number;duration:number};
 export type LyricLine={hanzi:string;pinyin:string;meaning_th:string;meaning_en:string;notes:SongNote[]};
-export type SongScene='guest'|'happy'|'birthday'|'mom'|'friends'|'tigers'|'ducks'|'bunny';
+export type SongScene='happy'|'birthday'|'mom'|'friends'|'tigers'|'stars';
 export type KidsSong={id:SongScene;title:string;pinyin:string;title_th:string;title_en:string;practice_title:string;practice_title_th:string;practice_title_en:string;kind:'traditional'|'original';bpm:number;lyrics:LyricLine[];moral_value_th:string;moral_value_en:string;icon:string;source?:string};
 type Row=[string,string,string,string,string];
 type Meta=Omit<KidsSong,'lyrics'>;
@@ -13,11 +13,6 @@ function song(meta:Meta,rows:Row[]):KidsSong{return {...meta,lyrics:rows.map(([h
 const frere='https://portenotes.lacultureataporte.fr/guitare/repertoire/frere-jacques';
 const birthday='https://everyinstrument.com/happy-birthday/piano/';
 export const kidsSongs:KidsSong[]=[
-song({id:'guest',title:'客人来',pinyin:'Kè rén lái',title_th:'แขกมาเยี่ยม',title_en:'A Guest Comes',practice_title:'欢迎来我家',practice_title_th:'ยินดีต้อนรับสู่บ้าน',practice_title_en:'Welcome to My Home',kind:'original',bpm:94,icon:'🍵',moral_value_th:'ต้อนรับแขกด้วยรอยยิ้ม กล่าวสวัสดี และช่วยผู้ใหญ่จัดที่นั่ง',moral_value_en:'Welcome guests with a smile, greet them and help an adult offer a seat.'},[
- ['客人好呀','kè rén hǎo ya','สวัสดีค่ะ/ครับ คุณแขก','Hello, dear guest','C4 E4 G4 E4'],
- ['请进我家','qǐng jìn wǒ jiā','เชิญเข้าบ้านของฉัน','Please come into my home','D4 F4 E4 C4'],
- ['请坐这里','qǐng zuò zhè lǐ','เชิญนั่งตรงนี้','Please sit here','E4 G4 A4 G4'],
- ['一起喝茶','yì qǐ hē chá','ดื่มชาด้วยกัน','Let’s drink tea together','F4 E4 D4 C4:2']]),
 song({id:'happy',title:'如果感到幸福你就拍拍手',pinyin:'Rú guǒ gǎn dào xìng fú nǐ jiù pāi pāi shǒu',title_th:'ถ้ามีความสุขก็ปรบมือ',title_en:'If You’re Happy and You Know It',practice_title:'快乐小熊猫',practice_title_th:'แพนด้าน้อยแสนสุข',practice_title_en:'Happy Little Panda',kind:'original',bpm:112,icon:'👏',moral_value_th:'แสดงความสุขด้วยการเคลื่อนไหวและแบ่งปันรอยยิ้ม',moral_value_en:'Express happiness through movement and share your smile.'},[
  ['拍拍小手','pāi pāi xiǎo shǒu','ปรบมือเล็ก ๆ','Clap your little hands','C4 E4 G4 G4'],
  ['跺跺小脚','duò duo xiǎo jiǎo','กระทืบเท้าเบา ๆ','Stomp your little feet','D4 F4 A4 A4'],
@@ -47,15 +42,12 @@ song({id:'tigers',title:'两只老虎',pinyin:'Liǎng zhī lǎo hǔ',title_th:'�
  ['迈开小脚走路','mài kāi xiǎo jiǎo zǒu lù','ก้าวเท้าน้อย ๆ เดินไป','Walk on those little feet','G4:.5 A4:.5 G4:.5 F4:.5 E4 C4'],
  ['真可爱','zhēn kě ài','น่ารักจริง ๆ','So adorable','C4 G3 C4:2'],
  ['真可爱','zhēn kě ài','น่ารักจริง ๆ','So adorable','C4 G3 C4:2']]),
-song({id:'ducks',title:'数鸭子',pinyin:'Shǔ yā zi',title_th:'นับเป็ด',title_en:'Counting Ducks',practice_title:'池塘数小鸭',practice_title_th:'นับลูกเป็ดในสระ',practice_title_en:'Counting Ducklings at the Pond',kind:'original',bpm:106,icon:'🦆',moral_value_th:'ฝึกนับเลข อดทน และฟังคำแนะนำของผู้ใหญ่',moral_value_en:'Practise counting, be patient and listen to helpful adults.'},[
- ['一二三四','yī èr sān sì','หนึ่ง สอง สาม สี่','One, two, three, four','C4 C4 E4 G4'],
- ['五六七八','wǔ liù qī bā','ห้า หก เจ็ด แปด','Five, six, seven, eight','A4 G4 F4 E4'],
- ['九只小鸭','jiǔ zhī xiǎo yā','ลูกเป็ดเก้าตัว','Nine little ducks','D4 E4 G4 E4'],
- ['排队回家','pái duì huí jiā','เข้าแถวกลับบ้าน','Line up to go home','F4 D4 C4 C4:2']]),
-song({id:'bunny',title:'小兔子乖乖',pinyin:'Xiǎo tù zi guāi guāi',title_th:'กระต่ายน้อยเด็กดี',title_en:'Good Little Bunny',practice_title:'小兔安全家',practice_title_th:'บ้านปลอดภัยของกระต่ายน้อย',practice_title_en:'Bunny’s Safe Home',kind:'original',bpm:91,icon:'🐰',moral_value_th:'ไม่เปิดประตูให้คนแปลกหน้า ถ้าไม่แน่ใจให้ถามผู้ใหญ่ที่ไว้ใจได้',moral_value_en:'Do not open the door to strangers. Ask a trusted adult when unsure.'},[
- ['小兔在家','xiǎo tù zài jiā','กระต่ายน้อยอยู่บ้าน','Little bunny is at home','E4 D4 E4 G4'],
- ['有人敲门','yǒu rén qiāo mén','มีคนเคาะประตู','Someone knocks at the door','G4 A4 F4 E4'],
- ['先问大人','xiān wèn dà rén','ถามผู้ใหญ่ก่อน','Ask a grown-up first','D4 F4 E4 D4'],
- ['安全第一','ān quán dì yī','ความปลอดภัยมาก่อน','Safety comes first','E4 G4 D4 C4:2']])
+song({id:'stars',title:'小星星',pinyin:'Xiǎo xīng xing',title_th:'ดาวดวงน้อย',title_en:'Twinkle Twinkle Little Star',practice_title:'星空小熊猫',practice_title_th:'แพนด้าชมดาว',practice_title_en:'Panda’s Starry Sky',kind:'traditional',bpm:100,icon:'⭐',moral_value_th:'ชื่นชมธรรมชาติและตั้งคำถามด้วยความอยากรู้',moral_value_en:'Enjoy nature and ask curious questions.'},[
+ ['小熊猫看小星星','xiǎo xióng māo kàn xiǎo xīng xing','แพนด้าน้อยมองดูดาว','Little panda watches the stars','C4 C4 G4 G4 A4 A4 G4:2'],
+ ['夜空好像大花园','yè kōng hǎo xiàng dà huā yuán','ท้องฟ้ายามค่ำเหมือนสวนใหญ่','The night sky is like a big garden','F4 F4 E4 E4 D4 D4 C4:2'],
+ ['星星陪我说晚安','xīng xing péi wǒ shuō wǎn ān','ดวงดาวอยู่เป็นเพื่อนบอกราตรีสวัสดิ์','The stars keep me company at bedtime','G4 G4 F4 F4 E4 E4 D4:2'],
+ ['闭上眼睛做个梦','bì shàng yǎn jīng zuò ge mèng','หลับตาแล้วฝันดี','Close your eyes and dream','G4 G4 F4 F4 E4 E4 D4:2'],
+ ['小熊猫看小星星','xiǎo xióng māo kàn xiǎo xīng xing','แพนด้าน้อยมองดูดาว','Little panda watches the stars','C4 C4 G4 G4 A4 A4 G4:2'],
+ ['明天一起看太阳','míng tiān yì qǐ kàn tài yáng','พรุ่งนี้ไปดูดวงอาทิตย์ด้วยกัน','Tomorrow we’ll watch the sun together','F4 F4 E4 E4 D4 D4 C4:2']])
 ];
 export function songTimeline(song:KidsSong,speed=1){let time=0;const notes:{line:number;frequency:number;at:number;duration:number}[]=[];const lines=song.lyrics.map((line,i)=>{const start=time;for(const note of line.notes){const duration=note.duration/speed;notes.push({line:i,frequency:note.frequency,at:time,duration});time+=duration}return {start,end:time}});return {notes,lines,total:time}}

@@ -1,12 +1,11 @@
 export type Language = 'th' | 'en';
-export type Tab = 'explore' | 'pinyin' | 'songs' | 'numbers' | 'dictation' | 'games' | 'homework' | 'progress' | 'worksheets';
+export type Tab = 'explore' | 'pinyin' | 'songs' | 'dictation' | 'games' | 'homework' | 'progress' | 'worksheets';
 export const translations = {
   th: {
     brand: 'เพื่อนจีน', tagline: 'เรียนจีนด้วยกัน ทุกวัน', language: 'เลือกภาษา', navigation: 'เมนูหลัก', demoBadge: 'ตัวอย่างแอป',
     explore: {label:'สำรวจ', title:'เริ่มเรียนภาษาจีน', description:'เลือกชั้นเรียนของลูก แล้วฝึกคำศัพท์ทีละคำ'},
     pinyin:{label:'พินอิน',title:'ฝึกออกเสียงและประสมคำ Pinyin',description:'ดูตำแหน่งปาก ประสมพยัญชนะกับสระ และสนุกกับวรรณยุกต์ 4 เสียง'},
-    songs:{label:'เพลงเด็ก',title:'เพลงเด็กจีนยอดฮิต',description:'ร้องเพลงกับแพนด้า ครอบครัว และเพื่อนสัตว์ สำหรับอนุบาลและ ป.1'},
-    numbers:{label:'ตัวเลข',title:'ตัวเลขและสูตรคูณจีน',description:'นับเลข 0–10,000 และท่องสูตรคูณกับแพนด้า'},
+    songs:{label:'เพลงเด็ก',title:'เพลงเด็กจีนยอดฮิต',description:'ร้องเพลงกับแพนด้า ครอบครัว และเพื่อนสัตว์ สำหรับเริ่มต้นตั้งแต่เล็กและ ป.1'},
     dictation: {label:'เขียนตามคำบอก', title:'ฟัง เขียน และทบทวน', description:'ฝึกเขียนคำศัพท์ประจำสัปดาห์ แล้วทบทวนคำที่ยังไม่แม่น'},
     games: {label:'เกม', title:'สนุกกับภาษาจีน', description:'เรียนผ่าน 6 เกมฝึกทักษะการฟัง อ่าน และเขียน'},
     homework: {label:'การบ้าน', title:'ผู้ช่วยการบ้านภาษาจีน', description:'ถ่ายรูปหรือวางข้อความภาษาจีน เพื่อดูพินอิน คำแปล และคำอธิบาย'},
@@ -21,8 +20,7 @@ export const translations = {
     brand:'Mandarin Buddy', tagline:'A little Chinese, every day', language:'Choose language', navigation:'Main navigation', demoBadge:'App preview',
     explore:{label:'Explore',title:'Start learning Mandarin',description:'Choose your child’s grade and discover new words one at a time'},
     pinyin:{label:'Pinyin',title:'Pinyin Mouth & Blending Lab',description:'See how sounds are made, blend initials and finals, and ride all four tones'},
-    songs:{label:'Songs',title:'Famous Mandarin Kids’ Songs',description:'Sing with Panda, family and animal friends for Kindergarten and P.1'},
-    numbers:{label:'Numbers',title:'Numbers & Chinese 9×9 Multiplication Chant',description:'Explore numbers from 0 to 10,000 and chant multiplication with Panda'},
+    songs:{label:'Songs',title:'Famous Mandarin Kids’ Songs',description:'Sing with Panda, family and animal friends for Start Young and P.1'},
     dictation:{label:'Dictation',title:'Listen, write and review',description:'Practise weekly spelling and revisit tricky words'},
     games:{label:'Games',title:'Play your way to Mandarin',description:'Six games for practising listening, reading and writing'},
     homework:{label:'Homework',title:'Your Mandarin homework helper',description:'Upload a worksheet or paste Chinese to see pinyin, translation and explanations'},
