@@ -1,0 +1,14 @@
+// Offline checks for the enriched curriculum, local stroke assets and arcade puzzle coverage.
+const assert=require('node:assert/strict');const fs=require('node:fs');const path=require('node:path');const ts=require('typescript');const vm=require('node:vm');
+const root=path.resolve(__dirname,'..');
+const source=fs.readFileSync(path.join(root,'src/data/sampleVocab.ts'),'utf8');const mod={exports:{}};
+new Function('exports',ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(mod.exports);
+const {sampleVocab,vocabForGrade,grades}=mod.exports;
+assert.equal(sampleVocab.length,60);assert.equal(new Set(sampleVocab.map(w=>w.id)).size,60);
+const allChars=new Set();let mandatory=0;
+for(const grade of grades){const words=vocabForGrade(grade);assert.equal(words.length,10);assert.ok(words.some(w=>w.is_mandatory_write));for(const w of words){assert.equal(typeof w.is_mandatory_write,'boolean');if(w.is_mandatory_write)mandatory++;assert.equal(w.sentences.length,2);assert.notEqual(w.sentences[0].hanzi,w.sentences[1].hanzi);assert.equal(w.sentences[0].hanzi,w.example.hanzi);assert.equal(w.sentences[0].meaning_th,w.example.th);assert.equal(w.sentences[0].meaning_en,w.example.en);for(const s of w.sentences){assert.ok(s.hanzi.includes(w.hanzi),s.hanzi);assert.ok(s.pinyin&&s.meaning_th&&s.meaning_en)}assert.ok(w.memory_tip_th&&w.memory_tip_en);for(const ch of Array.from(w.hanzi))allChars.add(ch);}}
+for(const ch of allChars){const d=JSON.parse(fs.readFileSync(path.join(root,'public/hanzi',`${ch}.json`),'utf8'));assert.ok(d.strokes.length>0);assert.equal(d.strokes.length,d.medians.length);assert.ok(d.medians.every(m=>m.length>1));}
+const gameSource=ts.createSourceFile('GamesTab.tsx',fs.readFileSync(path.join(root,'src/components/tabs/GamesTab.tsx'),'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+function literal(name){let node;for(const statement of gameSource.statements){if(ts.isVariableStatement(statement)){for(const d of statement.declarationList.declarations){if(d.name.getText(gameSource)===name)node=d.initializer;}}}assert.ok(node);return vm.runInNewContext(`(${node.getText(gameSource)})`);}
+const sentences=literal('sentences'),paragraphs=literal('paragraphs');for(const grade of grades){const words=vocabForGrade(grade);assert.equal(sentences[grade].length,10);for(const [i,parts] of sentences[grade].entries())assert.equal(parts.join(''),words[i].example.hanzi);assert.equal(paragraphs[grade].length,grade>=4?2:0);for(const p of paragraphs[grade]){assert.equal(p.lines.length,3);assert.equal(p.translationsTh.length,3);assert.equal(p.translationsEn.length,3);assert.equal(new Set(p.lines).size,3);}}
+console.log(`PASS: 60 words, 120 sentences, ${mandatory} mandatory practice words, 60 bilingual memory tips, ${allChars.size} valid stroke JSON files, 60 sentence puzzles, six three-sentence stories.`);
