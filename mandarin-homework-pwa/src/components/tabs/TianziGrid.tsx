@@ -1,4 +1,5 @@
 'use client';
+import {rewardAnswer} from '@/utils/soundEffects';
 import { useEffect,useRef,useState } from 'react';
 import type HanziWriter from 'hanzi-writer';
 import type { Language } from '@/lib/translations';
@@ -27,7 +28,7 @@ export default function TianziGrid({character,mode,lang,onComplete}:{character:s
    if(typeof ResizeObserver!=='undefined'){observer=new ResizeObserver(()=>{if(cancelled)return;const next=Math.max(40,Math.round(el.clientWidth));w.updateDimensions({width:next,height:next,padding:Math.round(next*.1)});});observer.observe(el);}
    await w.getCharacterData();if(cancelled)return;
    if(mode==='animate'){const result=await w.animateCharacter();if(!cancelled&&!result?.canceled){setStatus('done');latestComplete.current?.();}}
-   else await w.quiz({showHintAfterMisses:2,highlightOnComplete:true,onComplete:()=>{if(!cancelled){setStatus('done');latestComplete.current?.();}}});
+   else await w.quiz({showHintAfterMisses:2,highlightOnComplete:true,onMistake:()=>rewardAnswer(false),onComplete:()=>{if(!cancelled){setStatus('done');latestComplete.current?.();}}});
   }catch{if(!cancelled)setStatus('error')}};void start();
   return()=>{cancelled=true;controller.abort();observer?.disconnect();const old=writer.current;old?.cancelQuiz();if(old)void old.hideCharacter({duration:0}).catch(()=>{});writer.current=null;el.replaceChildren();};
  },[character,mode,retry]);

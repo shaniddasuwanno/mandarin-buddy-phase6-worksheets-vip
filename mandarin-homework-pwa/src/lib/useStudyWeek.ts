@@ -7,7 +7,7 @@ const selected=new Map<LearningGrade,number>();
 export function useStudyWeek(grade:LearningGrade):[number,(week:number)=>void]{
  const [week,setWeek]=useState(()=>selected.get(grade)??1);
  function choose(next:number){
-  if(!(getStudyWeeks(grade).some(w=>w.week===next)||(grade===0?kindergartenReviewSets.some(w=>w.week===next):next===0)))return;
+  if(!(getStudyWeeks(grade).some(w=>w.week===next)))return;
   selected.set(grade,next);setWeek(next);
  }
  return [week,choose];

@@ -2,7 +2,7 @@ import AuthGate from '@/components/AuthGate';
 import PaywallModal from '@/components/PaywallModal';
 import PaidApp from '@/components/PaidApp';
 import { serverSupabase } from '@/lib/supabase/server';
-import { activeGrades } from '@/lib/worksheetAccess';
+import { resolveAccess } from '@/lib/worksheetAccess';
 
 // Never serve one account's access decision from a shared static cache.
 export const dynamic='force-dynamic';
@@ -15,7 +15,7 @@ export default async function Home({searchParams}:{searchParams:Promise<{payment
  const [{data:profile,error:profileError},grants]=await Promise.all([supabase.from('profiles').select('is_paid').eq('id',user.id).single(),supabase.from('worksheet_grants').select('grade,expires_at').eq('user_id',user.id)]);
  if(profileError||!profile)return <PaywallModal email={user.email??''} profileUnavailable/>;
  // Even '?payment=success' cannot grant access: only the verified DB flag can.
- const grades=grants.error?[]:activeGrades(grants.data??[]);const appAccess=profile.is_paid===true;
+ const {appAccess,worksheetGrades:grades}=resolveAccess(profile,grants.error?[]:grants.data??[]);
  if(!appAccess&&!grades.length)return <PaywallModal email={user.email??''} payment={params.payment==='success'?'success':params.payment==='cancelled'?'cancelled':undefined}/>;
  return <PaidApp key={user.id} userId={user.id} email={user.email??''} appAccess={appAccess} worksheetGrades={grades}/>;
 }

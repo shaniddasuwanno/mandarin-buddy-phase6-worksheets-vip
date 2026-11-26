@@ -20,16 +20,14 @@ function normalise(word:P1Word|P2Word):PrimaryCurriculumWord{
   weekly_moral_th:week.moral_th,weekly_moral_en:week.moral_en};
 }
 const p1Study=vocabP1.map(normalise),p2Study=vocabP2.map(normalise);
-const kgCategories=[...kindergartenPart1Categories,...kindergartenPart2Categories];
+const originalKgCategories=[...kindergartenPart1Categories,...kindergartenPart2Categories];
+const kgCategories=['good_habits','family','body','land_animals','fruits','sea_animals','food','places','colors_shapes','numbers_counting'].map((id,i)=>{const c=originalKgCategories.find(c=>c.id===id)!;return {...c,unit:i+1,title_en:id==='good_habits'?'Polite Words & Greetings':id==='family'?'Family':id==='body'?'Body Parts':id==='land_animals'?'Animals':id==='fruits'?'Fruits':c.title_en,title_th:id==='body'?'ส่วนต่าง ๆ ของร่างกาย':id==='good_habits'?'คำสุภาพและคำทักทาย':c.title_th}});
 export interface KindergartenStudyWord extends VocabWord {grade:0;week:number;category:string;category_title_th:string;category_title_en:string;moral_lesson_th:string;illustration:{scene:string;animation:string}}
 const kindergartenStudy:KindergartenStudyWord[]=[...vocabKindergartenPart1,...vocabKindergartenPart2].map((w,i)=>{
  const first=w.sentences[0],cat=kgCategories.find(c=>c.id===w.category)!;
- return {...w,grade:0,week:Math.floor(i/25)+1,category_title_th:cat.title_th,category_title_en:cat.title_en,meaningTh:w.meaning_th,meaningEn:w.meaning_en,sentences:[first,w.sentences[1]],example:{hanzi:first.hanzi,pinyin:first.pinyin,th:first.meaning_th,en:first.meaning_en},is_mandatory_write:true};
+ return {...w,grade:0,week:cat.unit,category_title_th:cat.title_th,category_title_en:cat.title_en,meaningTh:w.meaning_th,meaningEn:w.meaning_en,sentences:[first,w.sentences[1]],example:{hanzi:first.hanzi,pinyin:first.pinyin,th:first.meaning_th,en:first.meaning_en},is_mandatory_write:true};
 });
-const kgWeeks:PrimaryWeek[]=Array.from({length:8},(_,i)=>{
- const words=kindergartenStudy.slice(i*25,(i+1)*25),cats=[...new Set(words.map(w=>w.category))].map(id=>kgCategories.find(c=>c.id===id)!);
- return {week:i+1,title_th:cats.map(c=>c.title_th).join(' / '),title_en:cats.map(c=>c.title_en).join(' / '),moral_th:'เรียนรู้ด้วยความสุข มีน้ำใจและรับผิดชอบ',moral_en:'Learn joyfully, be kind and responsible'};
-});
+const kgWeeks:PrimaryWeek[]=kgCategories.map(c=>({week:c.unit,title_th:c.title_th,title_en:c.title_en,moral_th:'',moral_en:''}));
 export const kindergartenReviewSets=kgCategories.map(c=>({week:100+c.unit,title_th:c.title_th,title_en:c.title_en}));
 export const curriculumVocab:readonly VocabWord[]=[...kindergartenStudy,...p1Study,...p2Study,...vocabP3,...vocabP4,...vocabP5,...vocabP6];
 export const allLearningWords:readonly VocabWord[]=[...curriculumVocab,...sampleVocab];

@@ -1,4 +1,5 @@
 'use client';
+import {rewardAnswer} from '@/utils/soundEffects';
 import { useEffect, useState } from 'react';
 import { Check, X, Volume2, Turtle, Eye, RotateCcw, Sparkles, Headphones, BookOpenCheck } from 'lucide-react';
 import { type LearningGrade, type VocabWord } from '@/data/sampleVocab';
@@ -59,7 +60,7 @@ function Trainer({lang,grade,missed,onResult,startInReview,week}:TrainerProps&{w
   }
   function rate(correct:boolean) {
     if(!revealed||!word)return;
-    stop();onResult(word,correct);setResults(old=>[...old,correct]);setIndex(i=>i+1);setRevealed(false);setAnswer('');
+    stop();rewardAnswer(correct,index+1===round.length);onResult(word,correct);setResults(old=>[...old,correct]);setIndex(i=>i+1);setRevealed(false);setAnswer('');
   }
   return <section className="mt-5">
     <div className="grid grid-cols-2 gap-2 rounded-2xl bg-emerald-50 p-1.5" role="group" aria-label={c.weekly}>
@@ -72,7 +73,7 @@ function Trainer({lang,grade,missed,onResult,startInReview,week}:TrainerProps&{w
     :word&&<><div className="flex items-center justify-between text-sm font-bold text-slate-600"><span>{c.question}</span><span aria-live="polite">{index+1}/{round.length}</span></div><div role="progressbar" aria-label={c.question} aria-valuemin={0} aria-valuemax={round.length} aria-valuenow={index+1} className="mt-2 h-2 overflow-hidden rounded-full bg-emerald-100"><div className="h-full rounded-full bg-emerald-600 transition-all" style={{width:`${(index+1)/round.length*100}%`}}/></div>
       {last!==null&&<p role="status" className={`mt-3 rounded-xl px-3 py-2 text-sm font-bold ${last?'bg-emerald-100 text-emerald-800':'bg-amber-50 text-amber-900'}`}>{last?c.correctMsg:c.missMsg}</p>}
       <article className="mt-4 rounded-3xl border border-emerald-100 bg-white p-5 text-center shadow-sm"><div aria-hidden="true" className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-emerald-100 text-emerald-700"><Headphones size={38}/></div><h3 className="mt-3 text-lg font-bold text-emerald-950">{c.listen}</h3>
-        <div className="mt-4 grid grid-cols-2 gap-2"><button type="button" onClick={()=>speak(word.hanzi,.9)} className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-emerald-700 px-2 text-sm font-bold text-white"><Volume2 size={18}/>{c.normal}</button><button type="button" onClick={()=>speak(word.hanzi,.65)} className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-amber-100 px-2 text-sm font-bold text-amber-900"><Turtle size={18}/>{c.slow}</button></div>
+        <div className="mt-4 grid grid-cols-2 gap-2"><button type="button" onClick={()=>speak(word.hanzi,1)} className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-emerald-700 px-2 text-sm font-bold text-white"><Volume2 size={18}/>{c.normal}</button><button type="button" onClick={()=>speak(word.hanzi,.65)} className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-amber-100 px-2 text-sm font-bold text-amber-900"><Turtle size={18}/>{c.slow}</button></div>
         {isPrimaryWord(word)&&<button type="button" onClick={()=>speak(word.tingxie_callout_zh)} className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-sky-100 p-3 text-sm font-bold text-sky-900"><Volume2 size={18}/>{lang==='th'?'ฟังคำใบ้เขียนตามคำบอก':'Hear dictation clue'}</button>}{error&&<p role="status" className="mt-3 text-sm text-rose-700">{c.error}</p>}
         <label className="mt-4 block text-left text-xs font-semibold text-slate-600" htmlFor="dictation-answer">{c.placeholder}</label><input id="dictation-answer" type="text" lang="zh-CN" autoComplete="off" spellCheck={false} value={answer} disabled={revealed} onChange={e=>setAnswer(e.target.value)} placeholder="…" className="mt-1 w-full rounded-xl border border-emerald-100 bg-slate-50 p-4 text-center text-xl outline-emerald-600 disabled:opacity-70"/>
         {!revealed?<button type="button" onClick={()=>setRevealed(true)} className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 font-bold text-emerald-800"><Eye size={19}/>{c.reveal}</button>:<div className="mt-4 rounded-2xl bg-emerald-50 p-4" aria-live="polite"><p className="text-sm font-bold text-emerald-700">{c.answer}</p><p lang="zh-CN" className="mt-2 text-5xl font-black text-emerald-950">{word.hanzi}</p><p className="mt-2 text-lg text-slate-600">{word.pinyin}</p><p className="mt-2 font-bold">{lang==='th'?word.meaningTh:word.meaningEn}</p><p className="mt-3 text-sm text-slate-500">{c.compare}</p></div>}

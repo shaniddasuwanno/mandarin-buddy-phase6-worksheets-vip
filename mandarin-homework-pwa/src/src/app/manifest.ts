@@ -1,2 +1,0 @@
-import type { MetadataRoute } from 'next';
-export default function manifest():MetadataRoute.Manifest {return {name:'Mandarin Buddy | เพื่อนจีน',short_name:'Mandarin Buddy',description:'Mandarin for Thai primary school families',start_url:'/',scope:'/',display:'standalone',background_color:'#f6faf7',theme_color:'#047857',lang:'th',icons:[{src:'/icon.svg',sizes:'any',type:'image/svg+xml',purpose:'any'}]};}
